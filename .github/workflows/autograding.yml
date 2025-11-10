@@ -39,14 +39,6 @@ jobs:
           # and writes its final report to 'results.json'.
           python .github/agent.py --output-file results.json
 
-      # This step reads the JSON file and puts its content
-      # into an 'output' that the reporter can read.
-      - name: Load Agent Results
-        id: load-results
-        run: |
-          # We use 'EOF' as a delimiter for the multi-line JSON
-          echo "result=$(cat results.json)" >> $GITHUB_OUTPUT
-
       - name: Load Agent Results
         id: load-results
         run: |
