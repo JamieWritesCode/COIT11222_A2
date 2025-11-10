@@ -28,6 +28,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install anthropic httpx # Install the Anthropic library
+          sudo apt-get update && sudo apt-get install -y jq
 
       - name: Run AI Agent Assessment
         id: ai-agent
@@ -42,11 +43,9 @@ jobs:
       - name: Load Agent Results
         id: load-results
         run: |
-          # Use a unique delimiter that is unlikely to be in the JSON
-          DELIMITER="---END_OF_AGENT_OUTPUT---"
-          echo "result<<$DELIMITER" >> $GITHUB_OUTPUT
-          cat results.json >> $GITHUB_OUTPUT
-          echo "$DELIMITER" >> $GITHUB_OUTPUT
+          # Use jq -c to "compact" the JSON into a single line
+          # This is the most reliable way to pass JSON between steps.
+          echo "result=$(jq -c . results.json)" >> $GITHUB_OUTPUT
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
