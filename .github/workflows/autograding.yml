@@ -47,13 +47,18 @@ jobs:
           # We use 'EOF' as a delimiter for the multi-line JSON
           echo "result=$(cat results.json)" >> $GITHUB_OUTPUT
 
+      - name: Load Agent Results
+        id: load-results
+        run: |
+          echo "result<<EOF" >> $GITHUB_OUTPUT
+          cat results.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          # This env var name is critical:
-          # [STEP_ID_IN_UPPERCASE]_RESULTS
+          # This variable name must match the step ID above
           LOAD_RESULTS_RESULTS: ${{ steps.load-results.outputs.result }}
         with:
-          # This 'runners' list MUST match the ID of the step
-          # that provides the results (i.e., 'load-results')
+          # This 'runners' list must match the step ID above
           runners: load-results
