@@ -37,6 +37,6 @@ jobs:
           python .github/agent.py --output-file results.json
 
       - name: Autograding Reporter
-        uses: github-education-resources/autograding-grading-reporter@v1
+        uses: classroom-resources/autograding-grading-reporter@v1
         with:
           results-file: results.json
