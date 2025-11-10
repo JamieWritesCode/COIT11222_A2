@@ -1,0 +1,7 @@
+carbrand,received,sold
+BMW,20,
+Hyundai,40,4 0
+Mercedes,15,
+Mazda, 50 , missing data
+Audi, nine ,
+Skoda,10,
