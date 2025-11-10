@@ -42,9 +42,11 @@ jobs:
       - name: Load Agent Results
         id: load-results
         run: |
-          echo "result<<EOF" >> $GITHUB_OUTPUT
+          # Use a unique delimiter that is unlikely to be in the JSON
+          DELIMITER="---END_OF_AGENT_OUTPUT---"
+          echo "result<<$DELIMITER" >> $GITHUB_OUTPUT
           cat results.json >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          echo "$DELIMITER" >> $GITHUB_OUTPUT
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
