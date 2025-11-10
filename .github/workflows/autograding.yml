@@ -37,7 +37,7 @@ jobs:
           # This one command runs the entire assessment.
           # The agent reads its instructions from the .md files
           # and writes its final report to 'results.json'.
-          python .github/runner.py --output-file .github/results.json
+          python .github/agent.py --output-file .github/results.json
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
