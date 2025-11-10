@@ -1,0 +1,47 @@
+name: Autograding Tests
+on:
+  - push
+  - workflow_dispatch
+  - repository_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          # This Python version is for running the agent,
+          # not necessarily the student's code.
+          python-version: '3.11' 
+
+      - name: Install Agent Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install anthropic httpx # Install the Anthropic library
+
+      - name: Run AI Agent Assessment
+        id: ai-agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          # This one command runs the entire assessment.
+          # The agent reads its instructions from the .md files
+          # and writes its final report to 'results.json'.
+          python .github/runner.py --output-file .github/results.json
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        with:
+          # The reporter action reads its data directly from the
+          # JSON file created by our agent.
+          results-file: .github/results.json
